@@ -29,11 +29,13 @@ public partial class CraftyOrnamentsContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<PasswordByte> PasswordBytes { get; set; }
     public virtual DbSet<AuthenticationDetails> AuthenticationDetails { get; set; }
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=SRIK;Database=CraftyOrnaments;Trusted_Connection=True;TrustServerCertificate=True;");
+    public virtual DbSet<PasswordByte> PasswordBytes { get; set; }
+
+
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Server=SRIK;Database=CraftyOrnaments;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,10 +65,6 @@ public partial class CraftyOrnamentsContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.OrderCount).HasDefaultValueSql("((0))");
-
-            entity.HasOne(d => d.Address).WithMany(p => p.AccountProfiles)
-                .HasForeignKey(d => d.AddressId)
-                .HasConstraintName("FK__AccountPr__Addre__2A4B4B5E");
 
             entity.HasOne(d => d.Role).WithMany(p => p.AccountProfiles)
                 .HasForeignKey(d => d.RoleId)

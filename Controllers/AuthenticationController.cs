@@ -21,12 +21,12 @@ namespace API_CraftyOrnaments.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<RoleDeciderResult>>> AuthenticateCredentials(string email, string password)
+        public async Task<ActionResult> AuthenticateCredentials(UserCredentials usercreds)
         {
 
             string storedProcedureQuery = "EXEC dbo.RoleDecider @email,@password";
-            var role = await _context.AuthenticationDetails.FromSqlRaw(storedProcedureQuery, new SqlParameter("email", email),
-             new SqlParameter("password", password)).ToListAsync();
+            var role = await _context.AuthenticationDetails.FromSqlRaw(storedProcedureQuery, new SqlParameter("email", usercreds.email),
+             new SqlParameter("password", usercreds.password)).ToListAsync();
 
             if (role is null)
             {
@@ -36,8 +36,17 @@ namespace API_CraftyOrnaments.Controllers
             else
             {
                 //implement something to store in .net's understanding
-                return Ok(role);
-                //return role;
+
+                switch (role[0].userID)
+                {
+                    case -1:
+                        return NotFound("The Username or password is incorrect");
+
+                    default:
+
+                        var JsonData=new { userId = role[0].userID };
+                        return new JsonResult(JsonData);
+                }
             }
 
 

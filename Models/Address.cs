@@ -23,7 +23,5 @@ public partial class Address
 
     public int? UserId { get; set; }
 
-    public virtual ICollection<AccountProfile> AccountProfiles { get; set; } = new List<AccountProfile>();
-
     public virtual AccountProfile? User { get; set; }
 }

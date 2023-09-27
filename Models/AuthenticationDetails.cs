@@ -6,6 +6,8 @@ namespace API_CraftyOrnaments.Models
     public class AuthenticationDetails
     {
 
-        public string? id { get; set; }
+        public int userID { get; set; }
+
+        public string? Roles { get; set; }
     }
 }
