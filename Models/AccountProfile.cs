@@ -15,8 +15,6 @@ public partial class AccountProfile
 
     public DateTime? Dob { get; set; }
 
-    public string? Email { get; set; }
-
     public long? PhoneNumber { get; set; }
 
     public byte[]? Password { get; set; }
@@ -35,9 +33,15 @@ public partial class AccountProfile
 
     public byte[]? ProfilePic { get; set; }
 
+    public string? Email { get; set; }
+
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
+    public virtual ICollection<FinalPayment> FinalPayments { get; set; } = new List<FinalPayment>();
+
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+    public virtual ICollection<Otp> Otps { get; set; } = new List<Otp>();
 
     public virtual Role? Role { get; set; }
 }

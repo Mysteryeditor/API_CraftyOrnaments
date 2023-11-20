@@ -1,22 +1,17 @@
 global using API_CraftyOrnaments.Models;
-global using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+using API_CraftyOrnaments.DAL.Contracts;
+using API_CraftyOrnaments.DAL.Repository;
+using API_CraftyOrnaments.Middlewares;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-//configure the sql server database connectionstrings
 builder.Services.AddDbContext<CraftyOrnamentsContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("mvcConnection")));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
-
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddCors();
+builder.Services.AddAuthentication();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowOrigin",
@@ -27,9 +22,21 @@ builder.Services.AddCors(options =>
                                 .AllowAnyMethod();
         });
 });
+builder.Services.Configure<FormOptions>(o =>
+{
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
+});
+builder.Services.AddControllers();
+
+builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IPayments, PaymentsRepository>();
+builder.Services.AddScoped<IAuthentication, Authentication>();
+builder.Services.AddCors();
+
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -39,9 +46,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ApiKeyMiddleware>();
 
-app.UseAuthorization();
 
 app.MapControllers();
 app.UseCors("AllowOrigin");
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"assets")),
+    RequestPath = new PathString("/assets")
+}) ;
+
 app.Run();

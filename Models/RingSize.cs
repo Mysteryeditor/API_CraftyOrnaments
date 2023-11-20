@@ -3,21 +3,17 @@ using System.Collections.Generic;
 
 namespace API_CraftyOrnaments.Models;
 
-public partial class Ornament
+public partial class RingSize
 {
-    public short OrnamentId { get; set; }
+    public short SizeId { get; set; }
 
-    public string OrnamentName { get; set; } = null!;
+    public string? SizeName { get; set; }
 
-    public string? OrnamentDescription { get; set; }
-
-    public decimal? MakingCharge { get; set; }
+    public decimal? SizeValue { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
-
-    public string? OrnamentImage { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

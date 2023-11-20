@@ -13,7 +13,11 @@ public partial class MetalChoice
 
     public string? PurityGrade { get; set; }
 
-    public byte[]? MetalImage { get; set; }
+    public DateTime? CreatedDate { get; set; }
+
+    public DateTime? ModifiedDate { get; set; }
+
+    public string? MetalImage { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

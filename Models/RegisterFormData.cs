@@ -9,12 +9,14 @@
         public string? email { get; set; }
     
         public string? password { get; set; }
-  
+
+        public string? confirmPassword { get; set; }
+
         public DateTime? DOB { get; set; }
 
         public string? gender { get; set; }
 
-        public int phoneNumber { get; set; }
+        public long phoneNumber { get; set; }
 
 
 
